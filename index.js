@@ -58,7 +58,9 @@ function determineDepth(node, fragments, depthSoFar, maxDepth, context, operatio
       new GraphQLError(`'${operationName}' exceeds maximum operation depth of ${maxDepth}`, [ node ])
     )
   }
-
+  if (!node) { // this can happen when invalid GQL query/mutation is sent. For example when user tries to spread a fragment which is not defined
+    return 0
+  }
   switch (node.kind) {
     case Kind.FIELD:
       // by default, ignore the introspection fields which begin with double underscores
