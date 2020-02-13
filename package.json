@@ -3,13 +3,14 @@
   "version": "1.1.0",
   "description": "Limit the complexity of your GraphQL queries based on depth.",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "main": "index.js",
   "scripts": {
     "docs": "sed -n '/Documentation/q;p' README.md > README.bak.md; echo '## Documentation' >> README.bak.md; jsdoc2md --heading-depth 3 index.js >> README.bak.md && mv -f README.bak.md README.md",
     "lint": "eslint index.js",
-    "test": "npm run lint && nyc ava test.js"
+    "test": "npm run lint && nyc ava test.js",
+    "dev": "ava test.js -w"
   },
   "ava": {
     "verbose": true
@@ -38,14 +39,15 @@
     "graphql": "*"
   },
   "devDependencies": {
-    "ava": "^0.21.0",
-    "eslint": "^4.4.1",
-    "eslint-config-airbnb-base": "^11.3.1",
+    "ava": "^3.3.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
     "graphql": "^0.10.5",
-    "jsdoc-to-markdown": "^3.0.0",
-    "nyc": "^11.1.0"
+    "jsdoc-to-markdown": "^5.0.3",
+    "nyc": "^15.0.0"
   },
   "dependencies": {
-    "arrify": "^1.0.1"
+    "arrify": "^2.0.1"
   }
 }

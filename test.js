@@ -180,6 +180,26 @@ test('should ignore the introspection query', t => {
   t.deepEqual([], errors)
 })
 
+test('should ignore an invalid query', t => { // regression test for https://github.com/stems/graphql-depth-limit/issues/9
+  const document = createDocument(`
+    query read1 {
+
+      user {
+        ... on Human {
+          ...nonexistentFragment
+        }
+      }
+    }
+  
+  fragment humanInfo on Human {
+    email
+  }`)
+  t.plan(1)
+  const errors = validate(schema, document, [ ...specifiedRules, depthLimit(5) ])
+
+  t.snapshot(errors);
+})
+
 test('should catch a query thats too deep', t => {
   const query = `{
     user {

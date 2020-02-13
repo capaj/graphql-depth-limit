@@ -9,7 +9,7 @@ const arrify = require('arrify')
  * @param {Number} maxDepth - The maximum allowed depth for any operation in a GraphQL document.
  * @param {Object} [options]
  * @param {Array<String|RegExp|Function>} options.ignore - Stops recursive depth checking based on a field name. Either a string or regexp to match the name, or a function that reaturns a boolean.
- * @param {Function} [callback] - Called each time validation runs. Receives an Object which is a map of the depths for each operation. 
+ * @param {Function} [callback] - Called each time validation runs. Receives an Object which is a map of the depths for each operation.
  * @returns {Function} The validator function for GraphQL validation phase.
  */
 const depthLimit = (maxDepth, options = {}, callback = () => {}) => validationContext => {
@@ -69,17 +69,13 @@ function determineDepth(node, fragments, depthSoFar, maxDepth, context, operatio
       if (shouldIgnore || !node.selectionSet) {
         return 0
       }
-      return 1 + Math.max(...node.selectionSet.selections.map(selection =>
-        determineDepth(selection, fragments, depthSoFar + 1, maxDepth, context, operationName, options)
-      ))
+      return 1 + Math.max(...node.selectionSet.selections.map(selection => determineDepth(selection, fragments, depthSoFar + 1, maxDepth, context, operationName, options)))
     case Kind.FRAGMENT_SPREAD:
       return determineDepth(fragments[node.name.value], fragments, depthSoFar, maxDepth, context, operationName, options)
     case Kind.INLINE_FRAGMENT:
     case Kind.FRAGMENT_DEFINITION:
     case Kind.OPERATION_DEFINITION:
-      return Math.max(...node.selectionSet.selections.map(selection =>
-        determineDepth(selection, fragments, depthSoFar, maxDepth, context, operationName, options)
-      ))
+      return Math.max(...node.selectionSet.selections.map(selection => determineDepth(selection, fragments, depthSoFar, maxDepth, context, operationName, options)))
     /* istanbul ignore next */
     default:
       throw new Error('uh oh! depth crawler cannot handle: ' + node.kind)
@@ -108,4 +104,3 @@ function seeIfIgnored(node, ignore) {
   }
   return false
 }
-
